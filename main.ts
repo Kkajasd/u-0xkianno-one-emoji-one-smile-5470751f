@@ -27,4 +27,17 @@ const outDir = "/output";
 // bind-mounts it) — only create the directory and overwrite the
 // file in place.
 mkdirSync(outDir, { recursive: true });
+
+// Guard: the entry must be exactly one emoji — a single code point,
+// no newline, non-whitespace. Fail loudly rather than write junk.
+if (
+  [...EMOJI].length !== 1 ||
+  EMOJI.trim() !== EMOJI ||
+  /\s/.test(EMOJI)
+) {
+  console.error(
+    `error: entry must be exactly one emoji, got ${JSON.stringify(EMOJI)}`,
+  );
+  process.exit(1);
+}
 writeFileSync(`${outDir}/entry.txt`, EMOJI, "utf8");
